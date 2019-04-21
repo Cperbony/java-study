@@ -1,44 +1,59 @@
 package com.cperbony.ch10.application;
 
-import java.util.InputMismatchException;
+import com.cperbony.ch10.application.model.entities.Reservation;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Program {
 
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
 
         Scanner sc = new Scanner(System.in);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        method1();
-        method2();
+        System.out.println("Room Number");
+        int number = sc.nextInt();
 
-        System.out.println("End of Program");
+        System.out.println("check-in date (dd/MM/YYYY");
+        Date checkIn = sdf.parse(sc.next());
 
-    }
+        System.out.println("check-out date (dd/MM/YYYY");
+        Date checkOut = sdf.parse(sc.next());
 
-    public static void method1() {
-        System.out.println("*** METHOD 1 BEGIN ****");
-        method2();
-        System.out.println("*** METHOD 1 END ****");
-    }
+        if (!checkOut.after(checkIn)) {
+            System.out.println("Error in Reservation: Check-ou date must be after check-in date");
+        } else {
+            Reservation reservation = new Reservation(number, checkIn, checkOut);
+            System.out.println("Reservation :" + reservation.toString());
 
-    public static void method2() {
-        System.out.println("*** METHOD 2 BEGIN ****");
-        Scanner sc = new Scanner(System.in);
+            System.out.println();
+            System.out.println("Enter to update the reservation");
 
-        try {
-            String[] vect = sc.nextLine().split(" ");
-            int position = sc.nextInt();
-            System.out.println(vect[position]);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Invalid position !");
-            e.printStackTrace();
-            sc.next();
-        } catch (InputMismatchException e) {
-            System.out.println("Input error");
+            System.out.println("Room Number");
+            number = sc.nextInt();
+
+            System.out.println("check-in date (dd/MM/YYYY");
+            checkIn = sdf.parse(sc.next());
+
+            System.out.println("check-out date (dd/MM/YYYY");
+            checkOut = sdf.parse(sc.next());
+
+            Date now = new Date();
+            if (checkIn.before(now) || checkOut.before(now)) {
+                System.out.println("Error in reservation: Reservation dates for update must be future ...");
+            } else if (!checkOut.after(checkIn)) {
+                System.out.println("Error in Reservation: Check-ou date must be after check-in date");
+            } else {
+                reservation.updateDates(checkIn, checkOut);
+                System.out.println("Reservation : " + reservation);
+            }
+            reservation.updateDates(checkIn, checkOut);
+            System.out.println("Reservation: " + reservation.toString());
         }
-        sc.close();
-        System.out.println("*** METHOD 2 END ****");
+    sc.close();
     }
+
 }
