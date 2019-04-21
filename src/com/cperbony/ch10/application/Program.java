@@ -14,7 +14,7 @@ public class Program {
 
         Scanner sc = new Scanner(System.in);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        CheckInsOut checkInsOut = new CheckInsOut(sc, sdf).invoke();
+        CheckInsOut checkInsOut = new CheckInsOut(sc, sdf);
 
         try {
             System.out.println("Room Number");
