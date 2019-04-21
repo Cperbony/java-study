@@ -14,16 +14,14 @@ public class Program {
 
         Scanner sc = new Scanner(System.in);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        CheckInsOut checkInsOut = new CheckInsOut(sc, sdf).invoke();
 
         try {
             System.out.println("Room Number");
             int number = sc.nextInt();
 
-            System.out.println("check-in date (dd/MM/YYYY");
-            Date checkIn = sdf.parse(sc.next());
-
-            System.out.println("check-out date (dd/MM/YYYY");
-            Date checkOut = sdf.parse(sc.next());
+            Date checkIn = checkInsOut.getCheckIn();
+            Date checkOut = checkInsOut.getCheckOut();
 
             Reservation reservation = new Reservation(number, checkIn, checkOut);
             System.out.println("Reservation :" + reservation.toString());
@@ -31,11 +29,8 @@ public class Program {
             System.out.println();
             System.out.println("Enter to update the reservation");
 
-            System.out.println("check-in date (dd/MM/YYYY)");
-            checkIn = sdf.parse(sc.next());
-
-            System.out.println("check-out date (dd/MM/YYYY)");
-            checkOut = sdf.parse(sc.next());
+            checkIn = checkInsOut.getCheckIn();
+            checkOut = checkInsOut.getCheckOut();
 
             reservation.updateDates(checkIn, checkOut);
             System.out.println("Reservation : " + reservation);
@@ -43,8 +38,6 @@ public class Program {
             reservation.updateDates(checkIn, checkOut);
 
             System.out.println("Reservation: " + reservation.toString());
-        } catch (ParseException e) {
-            System.out.println("Invalid Date Format Exception " + e.getMessage());
         } catch (DomainException e) {
             System.out.println("Error in reservation " + e.getMessage());
         } catch (RuntimeException e) {
@@ -53,4 +46,59 @@ public class Program {
         sc.close();
     }
 
+    private static class CheckinsDates {
+        private Scanner sc;
+        private SimpleDateFormat sdf;
+        private Date checkIn;
+        private Date checkOut;
+
+        public CheckinsDates(Scanner sc, SimpleDateFormat sdf) {
+            this.sc = sc;
+            this.sdf = sdf;
+        }
+
+        public Date getCheckIn() {
+            return checkIn;
+        }
+
+        public Date getCheckOut() {
+            return checkOut;
+        }
+
+        public CheckinsDates invoke() throws ParseException {
+            System.out.println("check-in date (dd/MM/YYYY");
+            checkIn = sdf.parse(sc.next());
+
+            System.out.println("check-out date (dd/MM/YYYY");
+            checkOut = sdf.parse(sc.next());
+            return this;
+        }
+    }
+
+    private static class CheckInsOut {
+        private Scanner sc;
+        private SimpleDateFormat sdf;
+        private Date checkIn;
+        private Date checkOut;
+
+        public CheckInsOut(Scanner sc, SimpleDateFormat sdf) {
+            this.sc = sc;
+            this.sdf = sdf;
+        }
+
+        public Date getCheckIn() {
+            return checkIn;
+        }
+
+        public Date getCheckOut() {
+            return checkOut;
+        }
+
+        public CheckInsOut invoke() throws ParseException {
+            CheckinsDates checkinsDates = new CheckinsDates(sc, sdf).invoke();
+            checkIn = checkinsDates.getCheckIn();
+            checkOut = checkinsDates.getCheckOut();
+            return this;
+        }
+    }
 }
