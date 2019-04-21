@@ -35,25 +35,25 @@ public class Program {
             System.out.println("Room Number");
             number = sc.nextInt();
 
-            System.out.println("check-in date (dd/MM/YYYY");
+            System.out.println("check-in date (dd/MM/YYYY)");
             checkIn = sdf.parse(sc.next());
 
-            System.out.println("check-out date (dd/MM/YYYY");
+            System.out.println("check-out date (dd/MM/YYYY)");
             checkOut = sdf.parse(sc.next());
 
-            Date now = new Date();
-            if (checkIn.before(now) || checkOut.before(now)) {
-                System.out.println("Error in reservation: Reservation dates for update must be future ...");
-            } else if (!checkOut.after(checkIn)) {
-                System.out.println("Error in Reservation: Check-ou date must be after check-in date");
-            } else {
-                reservation.updateDates(checkIn, checkOut);
-                System.out.println("Reservation : " + reservation);
-            }
             reservation.updateDates(checkIn, checkOut);
-            System.out.println("Reservation: " + reservation.toString());
+            System.out.println("Reservation : " + reservation);
+
+            String error = reservation.updateDates(checkIn, checkOut);
+
+            if (error != error) {
+                System.out.println("Error in Reservation: " + error);
+            } else {
+
+                System.out.println("Reservation: " + reservation.toString());
+            }
         }
-    sc.close();
+        sc.close();
     }
 
 }
